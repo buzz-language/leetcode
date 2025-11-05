@@ -1,0 +1,29 @@
+import "std";
+
+// Given two strings s and t, return true if s is a subsequence of t, or false otherwise.
+// A subsequence of a string is a new string that is formed from the original string by deleting some
+// (can be none) of the characters without disturbing the relative positions of the remaining characters.
+// (i.e., "ace" is a subsequence of "abcde" while "aec" is not).
+
+fun isSubsequence(s: str, t: str) > bool {
+    var i = 0;
+    var j = 0;
+    while (i < t.len() and j != s.len()) {
+        if (t[i] == s[j]) {
+            j += 1;
+        }
+        i += 1;
+    }
+
+    return j == s.len();
+}
+
+test "subsequence" {
+    // Input: s = "abc", t = "ahbgdc"
+    // Output: true
+    std\assert(isSubsequence(s: "abc", t: "ahbgdc"));
+
+    // Input: s = "axc", t = "ahbgdc"
+    // Output: false
+    std\assert(!isSubsequence(s: "axc", t: "ahbgdc"));
+}

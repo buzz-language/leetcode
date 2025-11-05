@@ -1,0 +1,40 @@
+import "std";
+
+// Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+
+fun isAnagram(s: str, t: str) > bool {
+    if (s.len() != t.len()) {
+        return false;
+    }
+
+    final counter = (0..26).toList().cloneMutable().fill(0);
+    foreach (char in s) {
+        counter[char.byte() - 'a'] += 1;
+    }
+
+    foreach (char in t) {
+        counter[char.byte() - 'a'] -= 1;
+    }
+
+    foreach (val in counter) {
+        if (val != 0) {
+            return  false;
+        }
+    }
+
+    return true;
+}
+
+test "valid anagram" {
+    // Input: s = "anagram", t = "nagaram"
+    // Output: true
+    std\assert(
+        isAnagram(s: "anagram", t: "nagaram"),
+    );
+
+    // Input: s = "rat", t = "car"
+    // Output: false
+    std\assert(
+        !isAnagram(s: "rat", t: "car"),
+    );
+}

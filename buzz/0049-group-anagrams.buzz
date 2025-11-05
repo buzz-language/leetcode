@@ -1,0 +1,63 @@
+import "std";
+
+// Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+
+fun groupAnagrams(strs: [str]) > [[str]] {
+    final map: mut {str: mut [str]} = mut {};
+
+    foreach (string in strs) {
+        final count = (0..26).toList().cloneMutable().fill(0);
+        foreach (char in string) {
+            count[char.byte() - 'a'] += 1;
+        }
+
+        final key = count.join("#");
+        if (map[key] != null) {
+            map[key]?.append(string);
+            continue;
+        }
+        map[key] = mut [string];
+    }
+
+    return map.values();
+}
+
+test "group anagrams" {
+    // Input: strs = ["eat","tea","tan","ate","nat","bat"]
+    // Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+    // Explanation:
+    // - There is no string in strs that can be rearranged to form "bat".
+    // - The strings "nat" and "tan" are anagrams as they can be rearranged to form each other.
+    // - The strings "ate", "eat", and "tea" are anagrams as they can be rearranged to form each other.
+    var grouped = groupAnagrams([ "eat", "tea", "tan", "ate", "nat", "bat" ]);
+    std\assert(
+        grouped.len() == 3
+        and grouped[2].len() == 1
+        and grouped[2][0] == "bat"
+        and grouped[1].len() == 2
+        and grouped[1][0] == "tan"
+        and grouped[1][1] == "nat"
+        and grouped[0].len() == 3
+        and grouped[0][0] == "eat"
+        and grouped[0][1] == "tea"
+        and grouped[0][2] == "ate"
+    );
+
+    // Input: strs = [""]
+    // Output: [[""]]
+    grouped = groupAnagrams([ "" ]);
+    std\assert(
+        grouped.len() == 1
+        and grouped[0].len() == 1
+        and grouped[0][0] == "",
+    );
+
+    // Input: strs = ["a"]
+    // Output: [["a"]]
+    grouped = groupAnagrams([ "a" ]);
+    std\assert(
+        grouped.len() == 1
+        and grouped[0].len() == 1
+        and grouped[0][0] == "a"
+    );
+}

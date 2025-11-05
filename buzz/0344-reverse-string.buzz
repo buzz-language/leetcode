@@ -1,0 +1,34 @@
+import "std";
+
+// Write a function that reverses a string. The input string is given as an array of characters s.
+// You must do this by modifying the input array in-place with O(1) extra memory.
+
+fun reverseString(s: mut [str]) {
+    var l = 0;
+    var r = s.len() - 1;
+    while (l <= r) {
+        final tmp = s[l];
+        s[l] = s[r];
+        s[r] = tmp;
+        l += 1;
+        r -= 1;
+    }
+}
+
+test "reverse string" {
+    // Input: s = ["h","e","l","l","o"]
+    // Output: ["o","l","l","e","h"]
+    var s = mut [ "h","e","l","l","o" ];
+    reverseString(s);
+    std\assert(
+        s.join("") == "olleh",
+    );
+
+    // Input: s = ["H","a","n","n","a","h"]
+    // Output: ["h","a","n","n","a","H"]
+    s = mut [ "H","a","n","n","a","h" ];
+    reverseString(s);
+    std\assert(
+        s.join("") == "hannaH",
+    );
+}

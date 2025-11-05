@@ -1,0 +1,68 @@
+import "std";
+import "math";
+
+// Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+// Implement the MinStack class:
+// - MinStack() initializes the stack object.
+// - void push(int val) pushes the element val onto the stack.
+// - void pop() removes the element on the top of the stack.
+// - int top() gets the top element of the stack.
+// - int getMin() retrieves the minimum element in the stack.
+// You must implement a solution with O(1) time complexity for each function.
+
+object MinStack {
+    stack: mut [int] = mut [],
+    minStack: mut [int] = mut [],
+
+    mut fun push(val: int) > void {
+        this.stack.append(val);
+        if (this.minStack.len() == 0) {
+            this.minStack.append(val);
+        } else {
+            this.minStack.append(
+                math\minInt(a: val, b: this.minStack[this.minStack.len() - 1])
+            );
+        }
+    }
+
+    mut fun pop() > void {
+        _ = this.stack.pop();
+        _ = this.minStack.pop();
+    }
+
+    fun top() > int {
+        return this.stack[this.stack.len() - 1];
+    }
+
+    fun getMin() > int {
+        return this.minStack[this.minStack.len() - 1];
+    }
+}
+
+test "min stack" {
+    // Input
+    // ["MinStack","push","push","push","getMin","pop","top","getMin"]
+    // [[],[-2],[0],[-3],[],[],[],[]]
+    // Output
+    // [null,null,null,null,-3,null,0,-2]
+    // Explanation
+    // MinStack minStack = new MinStack();
+    // minStack.push(-2);
+    // minStack.push(0);
+    // minStack.push(-3);
+    // minStack.getMin(); // return -3
+    // minStack.pop();
+    // minStack.top();    // return 0
+    // minStack.getMin(); // return -2
+    final stack = mut MinStack{};
+    stack.push(-2);
+    stack.push(0);
+    stack.push(-3);
+
+    std\assert(stack.getMin() == -3);
+
+    _ = stack.pop();
+
+    std\assert(stack.top() == 0);
+    std\assert(stack.getMin() == -2);
+}

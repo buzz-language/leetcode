@@ -1,0 +1,32 @@
+import "std";
+
+// Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
+// The overall run time complexity should be O(log (m+n)).
+
+fun findMedianSortedArrays(nums1: [int], nums2: [int]) > double {
+    final list = (nums1 + nums2)
+        .cloneMutable()
+        .sort(fun (a: int, b: int) => a > b);
+
+    final index = list.len() / 2;
+    return if ((list.len() & 0x01) == 0)
+        (std\toDouble(list[index]) + std\toDouble(list[index - 1])) / 2.0
+    else
+        std\toDouble(list[index]);
+}
+
+test "find median sorted arrays" {
+    // Input: nums1 = [1,3], nums2 = [2]
+    // Output: 2.00000
+    // Explanation: merged array = [1,2,3] and median is 2.
+    std\assert(
+        findMedianSortedArrays(nums1: [ 1, 3 ], nums2: [ 2 ]) == 2.0,
+    );
+
+    // Input: nums1 = [1,2], nums2 = [3,4]
+    // Output: 2.50000
+    // Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+    std\assert(
+        findMedianSortedArrays(nums1: [ 1, 2 ], nums2: [ 3, 4 ]) == 2.5,
+    );
+}

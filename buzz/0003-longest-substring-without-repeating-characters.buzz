@@ -1,0 +1,55 @@
+import "std";
+
+// Given a string s, find the length of the longest substring without duplicate characters.
+
+fun lengthOfLongestSubstring(s: str) > int {
+    var max = 0;
+    final map = mut {<str: int>};
+
+    final list = s.split("");
+    final result = mut [<str>];
+
+    foreach (i in 0..list.len()) {
+        if (result.indexOf(list[i]) == null) {
+            result.append(list[i]);
+        } else {
+            map[result.join("")] = result.len();
+
+            while (result.indexOf(list[i]) != null) {
+                _ = result.remove(0);
+            }
+
+            result.append(list[i]);
+        }
+    }
+
+    map[result.join("")] = result.len();
+    foreach (key, value in map) {
+        max = if (max > value) max else value;
+    }
+
+    return max;
+}
+
+test "length of longest substring" {
+    // Input: s = "abcabcbb"
+    // Output: 3
+    // Explanation: The answer is "abc", with the length of 3. Note that "bca" and "cab" are also correct answers.
+    std\assert(
+        lengthOfLongestSubstring("abcabcbb") == 3
+    );
+
+    // Input: s = "bbbbb"
+    // Output: 1
+    // Explanation: The answer is "b", with the length of 1.
+    std\assert(
+        lengthOfLongestSubstring("bbbbb") == 1
+    );
+
+    // Input: s = "pwwkew"
+    // Output: 3
+    // Explanation: The answer is "wke", with the length of 3.
+    std\assert(
+        lengthOfLongestSubstring("pwwkew") == 3
+    );
+}

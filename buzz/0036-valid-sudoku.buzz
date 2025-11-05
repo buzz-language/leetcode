@@ -1,0 +1,76 @@
+import "std";
+
+// Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+// 1. Each row must contain the digits 1-9 without repetition.
+// 2. Each column must contain the digits 1-9 without repetition.
+// 3. Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+// Note:
+// - A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+// - Only the filled cells need to be validated according to the mentioned rules.
+
+fun isValidSudoku(board: [[str]]) > bool {
+    final rows = (0..9).toList().cloneMutable().fill(0);
+    final cols = (0..9).toList().cloneMutable().fill(0);
+    final grids = (0..9).toList().cloneMutable().fill(0);
+
+    foreach (r in 0..9) {
+        foreach (c in 0..9) {
+            if (board[r][c] == ".") {
+                continue;
+            }
+
+            final idx = std\parseInt(board[r][c])! - 1;
+
+            if (rows[r] & 1 << idx != 0) {
+                return false;
+            }
+
+            rows[r] |= 1 << idx;
+
+            if (cols[c] & 1 << idx != 0) {
+                return false;
+            }
+
+            cols[c] |= 1 << idx;
+
+            if (grids[r / 3 * 3 + c / 3] & 1 << idx != 0) {
+                return false;
+            }
+
+            grids[r / 3 * 3 + c / 3] |= 1 << idx;
+        }
+    }
+
+    return true;
+}
+
+
+test "valid sudoku" {
+    std\assert(
+        isValidSudoku(
+            [["5","3",".",".","7",".",".",".","."]
+            ,["6",".",".","1","9","5",".",".","."]
+            ,[".","9","8",".",".",".",".","6","."]
+            ,["8",".",".",".","6",".",".",".","3"]
+            ,["4",".",".","8",".","3",".",".","1"]
+            ,["7",".",".",".","2",".",".",".","6"]
+            ,[".","6",".",".",".",".","2","8","."]
+            ,[".",".",".","4","1","9",".",".","5"]
+            ,[".",".",".",".","8",".",".","7","9"]]
+        ),
+    );
+
+    std\assert(
+        !isValidSudoku(
+            [["8","3",".",".","7",".",".",".","."]
+            ,["6",".",".","1","9","5",".",".","."]
+            ,[".","9","8",".",".",".",".","6","."]
+            ,["8",".",".",".","6",".",".",".","3"]
+            ,["4",".",".","8",".","3",".",".","1"]
+            ,["7",".",".",".","2",".",".",".","6"]
+            ,[".","6",".",".",".",".","2","8","."]
+            ,[".",".",".","4","1","9",".",".","5"]
+            ,[".",".",".",".","8",".",".","7","9"]]
+        ),
+    );
+}

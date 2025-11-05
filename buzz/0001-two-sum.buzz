@@ -1,0 +1,31 @@
+import "std";
+
+// Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+// You may assume that each input would have exactly one solution, and you may not use the same element twice.
+// You can return the answer in any order.
+
+fun twoSum(nums: [int], target: int) > [int]? {
+    final prevMap = mut {<int: int>};
+
+    foreach (i, n in nums) {
+        var diff = target - n;
+        if (prevMap[diff] != null) {
+            return [ prevMap[diff]!, i ];
+        }
+
+        prevMap[n] = i;
+    }
+
+    return null;
+}
+
+test "two sum" {
+    var res = twoSum([ 2, 7, 11, 15 ], target: 9);
+    std\assert(res?[?0] == 0 and res?[?1] == 1);
+
+    res = twoSum([ 3, 2, 4 ], target: 6);
+    std\assert(res?[?0] == 1 and res?[?1] == 2);
+
+    res = twoSum([ 3, 3 ], target: 6);
+    std\assert(res?[?0] == 0 and res?[?1] == 1);
+}
